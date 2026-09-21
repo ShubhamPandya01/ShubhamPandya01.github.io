@@ -91,7 +91,7 @@ export default function Nav() {
           <a href="#top" className="group flex items-baseline gap-2 whitespace-nowrap py-1.5">
             <span className="text-[15px] font-semibold tracking-tight text-fg">Shubham Pandya</span>
             <span className="hidden font-mono text-[12px] text-fg-subtle lg:inline">
-              cybersecurity + AI
+              Cybersecurity + AI
             </span>
           </a>
 
