@@ -10,9 +10,11 @@ import { fileURLToPath } from "node:url";
 const here = path.dirname(fileURLToPath(import.meta.url));
 const src = fs.readFileSync(path.join(here, "../src/theme/palettes.ts"), "utf8");
 
-const BG_LIGHT = "#fafaf9";
+const BG_LIGHT = "#f7f1ea";
 const BG_DARK = "#0c0a09";
-const SURFACE_LIGHT = "#ffffff";
+const SURFACE_LIGHT = "#fbf7f2";
+const TINT_LIGHT = "#f0e8de";
+const TINT_DARK = "#131110";
 const SURFACE_DARK = "#1a1817";
 
 const hex = (h) => {
@@ -55,9 +57,11 @@ for (const p of palettes) {
   const checks = {
     "accent on light page": ratio(p.accentLight, BG_LIGHT),
     "accent on light card": ratio(p.accentLight, SURFACE_LIGHT),
+    "accent on light tinted section": ratio(p.accentLight, TINT_LIGHT),
     "label on light accent": ratio(p.accentFgLight, p.accentLight),
     "accent on dark page": ratio(p.accentDark, BG_DARK),
     "accent on dark card": ratio(p.accentDark, SURFACE_DARK),
+    "accent on dark tinted section": ratio(p.accentDark, TINT_DARK),
     "label on dark accent": ratio(p.accentFgDark, p.accentDark),
   };
   const bad = Object.entries(checks).filter(([, v]) => v < AA);

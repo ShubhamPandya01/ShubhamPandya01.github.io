@@ -28,7 +28,8 @@ export type Palette = {
   kind: "season" | "festival";
   /** One short line shown next to the theme badge. */
   blurb: string;
-  /** Accent used on the light background. Must clear AA against #fafaf9. */
+  /** Accent used on the light background. Must clear AA against the page
+   *  (#f7f1ea) and the tinted sections (#f0e8de); check-palettes enforces it. */
   accentLight: string;
   /** Accent used on the dark background. Must clear AA against #0c0a09. */
   accentDark: string;
@@ -60,7 +61,7 @@ export const SEASONS: Record<Season, Palette> = {
     name: "Spring",
     kind: "season",
     blurb: "New growth, long light",
-    accentLight: "#15803d",
+    accentLight: "#147739",
     accentDark: "#4ade80",
     accentFgLight: "#ffffff",
     accentFgDark: "#052e16",
@@ -123,7 +124,7 @@ export const FESTIVALS: Palette[] = [
     name: "New Year",
     kind: "festival",
     blurb: "Fresh start",
-    accentLight: "#8a6d0b",
+    accentLight: "#7f640a",
     accentDark: "#fcd34d",
     accentFgLight: "#ffffff",
     accentFgDark: "#2a2005",
@@ -258,7 +259,7 @@ export const FESTIVALS: Palette[] = [
     name: "Diwali",
     kind: "festival",
     blurb: "Festival of lights",
-    accentLight: "#a16207",
+    accentLight: "#945a06",
     accentDark: "#fbbf24",
     accentFgLight: "#ffffff",
     accentFgDark: "#2a1d03",
@@ -273,7 +274,7 @@ export const FESTIVALS: Palette[] = [
     name: "Christmas",
     kind: "festival",
     blurb: "Evergreen and candlelight",
-    accentLight: "#15803d",
+    accentLight: "#147739",
     accentDark: "#6ee7b7",
     accentFgLight: "#ffffff",
     accentFgDark: "#052e16",
