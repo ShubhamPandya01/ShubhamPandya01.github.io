@@ -11,9 +11,10 @@
     "audit": "node scripts/audit.mjs",
     "check:palettes": "node scripts/check-palettes.mjs",
     "check:calendar": "node scripts/check-calendar.mjs",
-    "verify": "npm run lint && npm run build && npm run check:palettes && npm run check:calendar && npm run audit",
+    "verify": "npm run lint && npm run build && npm run check:palettes && npm run check:calendar && npm run check:phones && npm run audit",
     "make:art": "node scripts/make-art.mjs",
-    "make:og": "node scripts/make-og.mjs"
+    "make:og": "node scripts/make-og.mjs",
+    "check:phones": "node scripts/check-phones.mjs"
   },
   "dependencies": {
     "@fontsource-variable/geist": "^5.3.0",

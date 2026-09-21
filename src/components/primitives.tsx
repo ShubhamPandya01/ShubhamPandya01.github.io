@@ -182,20 +182,41 @@ export function WordReveal({
   text,
   className,
   delay = 0,
+  gradient = false,
 }: {
   text: string;
   className?: string;
   delay?: number;
+  /**
+   * Fill the words with the seasonal accent gradient. The gradient has to sit
+   * on each word, not on a wrapper: Safari will not paint background-clip:text
+   * through descendant inline-blocks that are being transformed, so a wrapper
+   * gradient leaves the words invisible on iPhone.
+   */
+  gradient?: boolean;
 }) {
   const reduce = useReducedMotion();
   const words = text.split(" ");
-  if (reduce) return <span className={className}>{text}</span>;
+  const n = words.length;
+  if (reduce) {
+    return <span className={`${className ?? ""} ${gradient ? "accent-gradient-text" : ""}`}>{text}</span>;
+  }
   return (
     <span className={className}>
       {words.map((w, i) => (
         <span key={`${w}-${i}`} className="inline-block overflow-hidden pb-[0.08em] align-bottom">
           <motion.span
-            className="inline-block"
+            className={`inline-block ${gradient ? "accent-gradient-text" : ""}`}
+            // Each word shows its own slice of one wide gradient, so the colour
+            // still runs continuously across the phrase.
+            style={
+              gradient
+                ? {
+                    backgroundSize: `${n * 100}% 100%`,
+                    backgroundPosition: `${n === 1 ? 0 : (i / (n - 1)) * 100}% 0`,
+                  }
+                : undefined
+            }
             initial={{ y: "110%" }}
             animate={{ y: 0 }}
             transition={{
@@ -205,7 +226,7 @@ export function WordReveal({
             }}
           >
             {w}
-            {i < words.length - 1 ? " " : ""}
+            {i < n - 1 ? " " : ""}
           </motion.span>
         </span>
       ))}

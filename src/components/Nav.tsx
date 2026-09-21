@@ -41,6 +41,26 @@ export default function Nav() {
     return () => io.disconnect();
   }, []);
 
+  /**
+   * Menu links close the menu first and then scroll. Letting the browser jump
+   * to the anchor while the menu is closing is unreliable on Android Chrome:
+   * the hash changes but the page never moves.
+   */
+  const goTo = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    setOpen(false);
+    requestAnimationFrame(() => {
+      const target = document.getElementById(href.slice(1));
+      if (!target) return;
+      target.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+      history.pushState(null, "", href);
+      // Move focus with the view so keyboard and screen reader users land in
+      // the section they chose rather than back at the top of the page.
+      target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    });
+  };
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -59,7 +79,9 @@ export default function Nav() {
 
       <header
         className={`fixed inset-x-0 top-0 z-50 transition-colors duration-300 ${
-          scrolled ? "border-b border-line bg-bg/90 backdrop-blur-xl" : "border-b border-transparent"
+          scrolled || open
+            ? "border-b border-line bg-bg/90 backdrop-blur-xl"
+            : "border-b border-transparent"
         }`}
       >
         <nav
@@ -127,18 +149,21 @@ export default function Nav() {
           {open && (
             <motion.div
               id="mobile-nav"
-              initial={reduce ? false : { height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
-              transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-              className="overflow-hidden border-b border-line bg-bg md:hidden"
+              // Opacity and transform only. Animating height to "auto" left
+              // the panel 1px tall on iPhone Safari, and the overflow clipping
+              // it needed cut off the theme picker.
+              initial={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduce ? { opacity: 0 } : { opacity: 0, y: -8 }}
+              transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              className="border-b border-line bg-bg md:hidden"
             >
               <ul className="px-5 pb-4 sm:px-8">
                 {links.map((l) => (
                   <li key={l.href}>
                     <a
                       href={l.href}
-                      onClick={() => setOpen(false)}
+                      onClick={(e) => goTo(e, l.href)}
                       className="block border-b border-line py-3 text-[15px] text-fg-muted"
                     >
                       {l.label}
@@ -146,12 +171,12 @@ export default function Nav() {
                   </li>
                 ))}
                 <li className="pt-4 sm:hidden">
-                  <SeasonPicker />
+                  <SeasonPicker variant="sheet" />
                 </li>
                 <li>
                   <a
                     href="#contact"
-                    onClick={() => setOpen(false)}
+                    onClick={(e) => goTo(e, "#contact")}
                     className="btn-shape mt-3 block bg-accent px-4 py-2.5 text-center text-[15px] font-medium text-accent-fg"
                   >
                     Get in touch
@@ -162,6 +187,22 @@ export default function Nav() {
           )}
         </AnimatePresence>
       </header>
+
+      {/* Dims the page under the open phone menu; tapping it closes the menu.
+          Sits below the header's z-index so the menu itself stays on top. */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            aria-hidden="true"
+            onClick={() => setOpen(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-40 bg-black/50 md:hidden"
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 }

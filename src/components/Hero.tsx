@@ -68,9 +68,7 @@ export default function Hero() {
 
           <h1 className="mt-6 text-[2rem] font-semibold leading-[1.06] tracking-[-0.03em] text-fg sm:text-[2.6rem] lg:text-[3rem] xl:text-[3.4rem]">
             <WordReveal text="I secure systems, then build" delay={0.05} />{" "}
-            <span className="accent-gradient-text">
-              <WordReveal text="what watches them." delay={0.28} />
-            </span>
+            <WordReveal text="what watches them." delay={0.28} gradient />
           </h1>
 
           <motion.p

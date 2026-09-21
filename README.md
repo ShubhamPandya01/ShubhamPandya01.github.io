@@ -16,6 +16,7 @@ npm run preview         # serve the production build on :5175
 npm run lint            # oxlint
 npm run check:palettes  # contrast gate for all 15 palettes (no browser needed)
 npm run check:calendar  # freezes the clock at 22 dates and checks the result
+npm run check:phones    # taps through menu, links and theme picker on Android + iPhone engines
 npm run audit           # 58 browser checks (a11y, contrast, images, layout, perf)
 npm run verify          # everything above, in order
 npm run make:art        # regenerate the project and capabilities artwork
@@ -70,13 +71,20 @@ the `candidates` array in `resolvePalette` (earlier in the array wins). Run
 
 ## Verification
 
-Three gates, all runnable locally and all exiting non-zero on failure:
+Four gates, all runnable locally and all exiting non-zero on failure:
 
 - **`check:palettes`** does the colour maths for all 15 palettes with no
   browser: each accent against its own page background and card surface, and
   each button label against its own accent, in both light and dark. 30 checks.
 - **`check:calendar`** freezes the browser clock at 22 dates and times and
   asserts which palette and button shape the real shipped page chose.
+- **`check:phones`** uses real taps on emulated phones in both engines that
+  matter, Chromium for Android and WebKit for iPhone Safari: the menu opens to
+  full height, every menu link and hero button actually lands on its section,
+  the theme picker fits on screen and can be used and dismissed, and the
+  gradient headline is really painted. It exists because four phone bugs once
+  shipped past a Chromium-only desktop audit. WebKit is a separate download:
+  `npx playwright install webkit chromium`.
 - **`audit`** drives Chromium through the page: WCAG AA contrast twice over
   (once from computed styles, once by hiding each element's glyphs and
   photographing the true painted background behind it, which is the only way to

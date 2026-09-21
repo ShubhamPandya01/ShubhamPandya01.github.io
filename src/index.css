@@ -79,6 +79,12 @@
     border-radius: 2px;
   }
 
+  /* Sections receive focus programmatically after menu navigation so screen
+     readers land in the right place. They are not controls, so no ring. */
+  section[tabindex="-1"]:focus {
+    outline: none;
+  }
+
   h1,
   h2,
   h3 {
