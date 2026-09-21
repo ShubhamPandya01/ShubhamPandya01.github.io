@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#fafaf9" />
+    <link rel="preload" as="image" type="image/webp" href="/img/portrait-680.webp"
+      imagesrcset="/img/portrait-680.webp 680w, /img/portrait-900.webp 900w"
+      imagesizes="(min-width: 1280px) 380px, 340px" media="(min-width: 1024px)" />
+    <title>Shubham Pandya, CyberSecurity and AI Engineer</title>
+    <meta
+      name="description"
+      content="Shubham Pandya is a cybersecurity analyst and applied AI practitioner in Oshawa, Ontario. Three years securing production systems, now building machine learning and retrieval pipelines."
+    />
+    <meta name="author" content="Shubham Pandya" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Shubham Pandya, CyberSecurity and AI Engineer" />
+    <meta
+      property="og:description"
+      content="Three years securing production systems, now building machine learning and retrieval pipelines."
+    />
+    <!-- Absolute on purpose: LinkedIn and most crawlers ignore relative URLs.
+         Update all three if the site moves to a custom domain. -->
+    <link rel="canonical" href="https://shubhampandya01.github.io/" />
+    <meta property="og:url" content="https://shubhampandya01.github.io/" />
+    <meta property="og:image" content="https://shubhampandya01.github.io/og.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Shubham Pandya, CyberSecurity and AI Engineer" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://shubhampandya01.github.io/og.jpg" />
+
+    <script>
+      // Applied before first paint so the correct theme renders immediately (no flash).
+      (function () {
+        try {
+          var stored = localStorage.getItem('theme');
+          var dark = stored
+            ? stored === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches;
+          document.documentElement.classList.toggle('dark', dark);
+          document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        } catch (e) {
+          /* private mode or blocked storage: fall back to the media query default */
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

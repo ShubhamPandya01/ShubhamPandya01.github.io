@@ -1,0 +1,229 @@
+@import "tailwindcss";
+
+/* Self-hosted variable fonts. No external font CDN at runtime. */
+@import "@fontsource-variable/geist";
+@import "@fontsource-variable/geist-mono";
+
+/*
+  Neutrals are fixed. The accent pair, the second hue and the button radius are
+  written at runtime by ThemeProvider from the palette for today's date, so the
+  values below are only the pre-hydration fallback.
+*/
+@theme {
+  --font-sans: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, monospace;
+
+  --color-bg: #fafaf9;
+  --color-bg-subtle: #f5f5f4;
+  --color-bg-elevated: #ffffff;
+  --color-fg: #1c1917;
+  --color-fg-muted: #57534e;
+  --color-fg-subtle: #6d6764;
+  --color-line: #e0dedc;
+  --color-line-strong: #c9c5c2;
+
+  --color-accent: #b23c06;
+  --color-accent-fg: #ffffff;
+  --color-second: #a16207;
+  --color-accent-subtle: rgba(178, 60, 6, 0.12);
+  --color-accent-faint: rgba(178, 60, 6, 0.06);
+}
+
+.dark {
+  --color-bg: #0c0a09;
+  --color-bg-subtle: #131110;
+  --color-bg-elevated: #1a1817;
+  --color-fg: #fafaf9;
+  --color-fg-muted: #b3aca7;
+  --color-fg-subtle: #918a85;
+  --color-line: #2a2624;
+  --color-line-strong: #3d3835;
+}
+
+:root {
+  --btn-radius: 4px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-accent-fg);
+  }
+
+  a,
+  button,
+  [role="tab"] {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@layer utilities {
+  /* Button shape follows the season: sharp in winter, pill at festivals. */
+  .btn-shape {
+    border-radius: var(--btn-radius);
+    transition:
+      border-radius 600ms cubic-bezier(0.16, 1, 0.3, 1),
+      background-color 300ms ease,
+      color 300ms ease,
+      transform 150ms ease;
+  }
+
+  /* Soft seasonal wash behind the hero and section headers. */
+  .aurora {
+    background:
+      radial-gradient(60% 55% at 18% 12%, var(--color-accent-subtle), transparent 62%),
+      radial-gradient(
+        48% 48% at 88% 8%,
+        color-mix(in srgb, var(--color-second) 14%, transparent),
+        transparent 60%
+      ),
+      radial-gradient(70% 60% at 50% 105%, var(--color-accent-faint), transparent 70%);
+  }
+
+  /* Cursor-tracked highlight. Position comes from --mx / --my set in JS. */
+  .spotlight::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    padding: 1px;
+    background: radial-gradient(
+      200px circle at var(--mx, 50%) var(--my, 0%),
+      var(--color-accent),
+      transparent 70%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 350ms ease;
+    pointer-events: none;
+  }
+  .spotlight:hover::before {
+    opacity: 0.8;
+  }
+
+  /* Cards rise slightly and pick up a seasonal shadow on hover. */
+  .lift {
+    transition:
+      transform 400ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 400ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 300ms ease;
+  }
+  .lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 44px -18px color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+
+  .accent-gradient-text {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-accent),
+      var(--color-second) 70%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .marquee-track {
+    animation: marquee 38s linear infinite;
+  }
+
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.16;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.45'/%3E%3C/svg%3E");
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.7;
+  }
+  70% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.pulse-ring {
+  animation: pulse-ring 2.6s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .marquee-track {
+    animation: none !important;
+  }
+  .grain::after {
+    display: none;
+  }
+}
